@@ -14,5 +14,5 @@ class SearchResult:
 
 class SearchProvider(abc.ABC):
     @abc.abstractmethod
-    def get_results(self, query: SearchQuery) -> SearchResult:
+    def search(self, query: SearchQuery) -> SearchResult:
         pass

@@ -1,6 +1,6 @@
 from datasources import isearchd_provider
 from presentation import cli_executor_impl
-from isearchcli.domain.executor import CLIExecutor
+from domain.executor import CLIExecutor
 
 
 def Init() -> CLIExecutor:

@@ -1,4 +1,4 @@
-from isearchcli.domain.provider import SearchProvider, SearchQuery, SearchResult
+from domain.provider import SearchProvider, SearchQuery, SearchResult
 
 
 class SearchProviderImpl(SearchProvider):
@@ -7,4 +7,4 @@ class SearchProviderImpl(SearchProvider):
 
     def search(self, query: SearchQuery) -> SearchResult:
         # TODO: implement me
-        pass
+        return SearchResult(filepaths=['hello', 'test', 'test123'])
