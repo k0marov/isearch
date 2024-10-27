@@ -3,16 +3,25 @@ from domain.provider import SearchProvider, SearchQuery
 from domain.config import Config
 
 
+HELP_MSG = \
+'''Usage: isearch [OPTIONS] QUERY 
+Semantic image search CLI 
+
+Options: 
+    -h, --help      show this help 
+    --info          print config info 
+'''
+
 class CLIExecutorImpl(CLIExecutor):
     def __init__(self, cfg: Config, provider: SearchProvider) -> None:
         self._cfg = cfg
         self._provider = provider
 
     def _help(self):
-        print('test help message')
+        print(HELP_MSG)
 
     def _info(self):
-        print(f'connecting to socket: {self._cfg.socket_path}')
+        print(f'Connecting to isearchd socket: {self._cfg.socket_path}')
 
     def execute(self, args: list[str]) -> None:
         if not args:

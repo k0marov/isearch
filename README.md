@@ -40,7 +40,7 @@ $ isearch 'мемы с котиками'
 ## Задачи 
 
 - [x] Документация, диаграммы 
-- [ ] isearch CLI  
+- [x] isearch CLI  
 - [ ] isearchd: прослушивание ивентов из inotify 
 - [ ] isearchd: обёртка для CLIP 
 - [ ] isearchd: обёртка для бд и поиска 
