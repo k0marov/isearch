@@ -1,3 +1,5 @@
+import typing
+
 from datasources import isearchd_provider
 from domain.config import Config
 from presentation import cli_executor_impl

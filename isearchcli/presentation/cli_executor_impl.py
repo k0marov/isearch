@@ -8,22 +8,25 @@ class CLIExecutorImpl(CLIExecutor):
         self._cfg = cfg
         self._provider = provider
 
-    def help(self):
+    def _help(self):
         print('test help message')
 
-    def info(self):
+    def _info(self):
         print(f'connecting to socket: {self._cfg.socket_path}')
 
     def execute(self, args: list[str]) -> None:
         if not args:
-            return self.help()
+            return self._help()
         if args[0].startswith('-'):
             if args[0] == '--info':
-                self.info()
+                self._info()
             else:
-                self.help()
+                self._help()
             return
-        query = SearchQuery(text=args[0])
+        return self._search(args[0])
+
+    def _search(self, text: str) -> None:
+        query = SearchQuery(text=text)
         results = self._provider.search(query)
         for filepath in results.filepaths:
             print(filepath)
