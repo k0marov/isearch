@@ -4,8 +4,8 @@ from domain import database, entities, dto
 
 
 class SQLiteDB(database.Database):
-    def __init__(self):
-        self._logger = logging.getLogger('sqlite_db')
+    def __init__(self, logger: logging.Logger):
+        self._logger = logger
     def search(self, query: dto.VectorSearchQuery) -> dto.SearchResult:
         pass
 

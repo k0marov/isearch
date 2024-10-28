@@ -11,11 +11,12 @@ from domain import database, entities, embedder
 from domain.inserter_service import  InserterService
 
 class InotifyInserterService(InserterService):
-    def __init__(self, dir_path: str, db: database.Database, emb: embedder.Embedder):
+    def __init__(self, logger: logging.Logger, dir_path: str, db: database.Database, emb: embedder.Embedder):
+        self._logger = logger
         self._dir_path = dir_path
         self._db = db
         self._emb = emb
-        self._logger = logging.getLogger('inotify_inserter')
+        self._logger = logger
 
     def _handle_event(self, event: FileSystemEvent) -> None:
         self._logger.info(f'got event {event}')
