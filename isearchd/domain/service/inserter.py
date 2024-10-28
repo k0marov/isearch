@@ -31,12 +31,12 @@ class InotifyInserterService(InserterService):
 
     def _insert_image(self, path: str, img: Image.Image):
         embedding = self._emb.generate_embedding_image(img)
-        self._db.insert(entities.Image(filepath=path, emb=embedding))
+        self._db.update_or_create(entities.Image(watched_dir=self._dir_path, filepath=path, emb=embedding))
 
 
     async def start(self) -> None:
         class Handler(FileSystemEventHandler):
-            def on_any_event(self_, event: FileSystemEvent) -> None:
+            def on_any_event(_, event: FileSystemEvent) -> None:
                 self._handle_event(event)
 
         observer = Observer()
@@ -44,8 +44,10 @@ class InotifyInserterService(InserterService):
             watchdog.events.FileCreatedEvent,
             watchdog.events.FileMovedEvent,
             watchdog.events.FileModifiedEvent,
+            watchdog.events.FileDeletedEvent,
         ))
 
         self._logger.info(f'started watching {self._dir_path}')
 
         observer.start()
+        # TODO: properly close all resources

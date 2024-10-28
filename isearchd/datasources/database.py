@@ -28,7 +28,7 @@ class SQLiteDB(database.Database):
                   typeof(embedding) == 'blob'
                   and vec_length(embedding) == {0}
                 )
-            )'''.format(EMBEDDING_SHAPE) # it's not an SQL injection since its our constant
+            )'''.format(EMBEDDING_SHAPE) # it's not an SQL injection since it's our constant
         )
 
     def search(self, query: dto.VectorSearchQuery) -> dto.SearchResult:
@@ -44,14 +44,19 @@ class SQLiteDB(database.Database):
         ''', {'emb': query.embedding.data.astype(np.float32)}).fetchall() # TODO: make 10 a variable
         return dto.SearchResult(filepaths=[filepath for _, filepath, _ in rows])
 
-    def insert(self, image: entities.Image) -> None:
-        self._logger.info(f'inserting image {image.filepath}')
+    def update_or_create(self, image: entities.Image) -> None:
+        self._logger.info(f'updating or creating image at {image.filepath}')
         self._db.execute('''
             insert into images values (
                :filepath, :dir, :embedding 
-            )
+            ) 
+            on conflict(filepath) 
+            do update set 
+                dir=excluded.dir, 
+                embedding=excluded.embedding
         ''', {
-            'dir': 'default_dir', # TODO: use dir
             'filepath': image.filepath,
+            'dir': image.watched_dir,
             'embedding': image.emb.data.astype(np.float32),
         })
+        self._db.commit()
