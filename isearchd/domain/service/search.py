@@ -1,8 +1,11 @@
+import logging
+
 from domain import search_service, dto, database, embedder
 
 
 class SearchServiceImpl(search_service.SearchService):
-    def __init__(self, db: database.Database, emb: embedder.Embedder):
+    def __init__(self, logger: logging.Logger, db: database.Database, emb: embedder.Embedder):
+        self._logger = logger
         self._db = db
         self._emb = emb
     def search(self, query: dto.SearchQuery) -> dto.SearchResult:

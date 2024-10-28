@@ -7,10 +7,10 @@ from domain.server import SocketServer
 RECV_SIZE = 1024
 
 class SocketServerImpl(SocketServer):
-    def __init__(self, cfg: config.Config, searcher: search_service.SearchService):
+    def __init__(self, logger: logging.Logger, cfg: config.Config, searcher: search_service.SearchService):
         self._cfg = cfg
         self._searcher = searcher
-        self._logger = logging.getLogger('server')
+        self._logger = logger
 
     async def start(self) -> None:
         server = await asyncio.start_unix_server(self._handler, self._cfg.socket_path)

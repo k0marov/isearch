@@ -1,5 +1,7 @@
 import abc
 
+from PIL.Image import Image
+
 from domain import dto
 
 
@@ -9,5 +11,5 @@ class Embedder(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def generate_embedding_image(self, image_path: str) -> dto.Embedding:
+    def generate_embedding_image(self, img: Image) -> dto.Embedding:
         pass

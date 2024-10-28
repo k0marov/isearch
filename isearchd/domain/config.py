@@ -6,6 +6,7 @@ import os
 class Config:
     socket_path: str
     db_path: str
+    img_dir: str
 
 def get_socket_path() -> str:
     return os.getenv('ISEARCHD_SOCKET') or os.path.expanduser('~/.cache/isearch/isearchd.sock')
