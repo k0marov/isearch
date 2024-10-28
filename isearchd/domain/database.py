@@ -11,3 +11,7 @@ class Database(abc.ABC):
     @abc.abstractmethod
     def update_or_create(self, image: entities.Image) -> None:
         pass
+
+    @abc.abstractmethod
+    def delete(self, filepath: str) -> None:
+        pass

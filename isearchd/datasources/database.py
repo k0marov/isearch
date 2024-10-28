@@ -45,7 +45,7 @@ class SQLiteDB(database.Database):
         return dto.SearchResult(filepaths=[filepath for _, filepath, _ in rows])
 
     def update_or_create(self, image: entities.Image) -> None:
-        self._logger.info(f'updating or creating image at {image.filepath}')
+        self._logger.info(f'update_or_create image row at {image.filepath}')
         self._db.execute('''
             insert into images values (
                :filepath, :dir, :embedding 
@@ -59,4 +59,9 @@ class SQLiteDB(database.Database):
             'dir': image.watched_dir,
             'embedding': image.emb.data.astype(np.float32),
         })
+        self._db.commit()
+
+    def delete(self, filepath: str) -> None:
+        self._logger.info(f'deleting image at {filepath}')
+        self._db.execute('delete from images where filepath = ?', (filepath,))
         self._db.commit()
