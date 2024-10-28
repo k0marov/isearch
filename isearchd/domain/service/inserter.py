@@ -20,12 +20,12 @@ class InotifyInserterService(InserterService):
 
     def _handle_event(self, event: FileSystemEvent) -> None:
         self._logger.info(f'got event {event}')
-        img_path = event.dest_path
+        img_path = event.dest_path if event.event_type == watchdog.events.EVENT_TYPE_MOVED else event.src_path
         try:
             img = Image.open(img_path)
             img.load()
         except Exception as e:
-            # self._logger.debug(f'failed opening file as image: {e}')
+            self._logger.debug(f'failed opening file as image: {e}')
             return
         self._insert_image(img_path, img)
 

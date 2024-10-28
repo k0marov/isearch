@@ -15,7 +15,7 @@ async def main():
         db_path=config.get_db_path(),
         img_dir=config.get_default_watching_dir(),
     )
-    db = database.SQLiteDB(logger=logger.getChild('database'))
+    db = database.SQLiteDB(logger=logger.getChild('database'), db_path=cfg.db_path)
 
     embedder = clip_embedder.CLIPEmbedder(logger=logger.getChild('embedder'))
     searcher = search.SearchServiceImpl(logger=logger.getChild('searcher'), db=db, emb=embedder)

@@ -16,4 +16,4 @@ class SearchQuery:
 
 @dataclasses.dataclass
 class SearchResult:
-    filenames: list[str]
+    filepaths: list[str]

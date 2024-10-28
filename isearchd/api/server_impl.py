@@ -20,6 +20,7 @@ class SocketServerImpl(SocketServer):
 
     async def _handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         input = (await reader.read(RECV_SIZE)).decode()
+        # TODO: read full input
         # while not reader.at_eof():
         #     input += (await reader.read(RECV_SIZE)).decode()
 
@@ -27,7 +28,7 @@ class SocketServerImpl(SocketServer):
         if input.startswith('search:'):
             query = input.removeprefix('search:')
             result = self._searcher.search(dto.SearchQuery(text=query))
-            output = '\n'.join(result.filenames)
+            output = '\n'.join(result.filepaths)
             self._logger.debug(f'answering with "{output}"')
             writer.write(output.encode())
         else:
