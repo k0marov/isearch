@@ -16,11 +16,8 @@ class InotifyInserterService(InserterService):
         self._dir_path = dir_path
         self._db = db
         self._emb = emb
-        self._logger = logger
 
-    def _handle_event(self, event: FileSystemEvent) -> None:
-        self._logger.info(f'got event {event}')
-        img_path = event.dest_path if event.event_type == watchdog.events.EVENT_TYPE_MOVED else event.src_path
+    def _handle_image(self, img_path: str) -> None:
         try:
             img = Image.open(img_path)
             img.load()
@@ -29,20 +26,26 @@ class InotifyInserterService(InserterService):
             return
         self._insert_image(img_path, img)
 
-    def _handle_deletion(self, event: FileDeletedEvent) -> None:
-        self._db.delete(event.src_path)
+    def _handle_deletion(self, path: str) -> None:
+        self._db.delete(path)
 
     def _insert_image(self, path: str, img: Image.Image) -> None:
         embedding = self._emb.generate_embedding_image(img)
         self._db.update_or_create(entities.Image(watched_dir=self._dir_path, filepath=path, emb=embedding))
 
-
     async def start(self) -> None:
         class Handler(FileSystemEventHandler):
             def on_any_event(_, event: FileSystemEvent) -> None:
-                self._handle_event(event)
+                self._logger.info(f'got event {event}')
+            def on_created(_, event: FileSystemEvent) -> None:
+                self._handle_image(event.dest_path)
+            def on_modified(_, event: FileSystemEvent) -> None:
+                self._handle_image(event.src_path)
+            def on_moved(_, event: FileSystemEvent) -> None:
+                self._handle_image(event.dest_path)
+                self._handle_deletion(event.src_path)
             def on_deleted(_, event: FileDeletedEvent) -> None:
-                self._handle_deletion(event)
+                self._handle_deletion(event.src_path)
                 pass
 
         observer = Observer()
