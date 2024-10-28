@@ -24,6 +24,8 @@ async def main():
 
     server = server_impl.SocketServerImpl(logger.getChild('server'), cfg, searcher)
 
+    image_inserter.reindex_full(cfg.img_dir) # TODO: remove
+
     await asyncio.gather(server.start(), watcher.start())
 
 

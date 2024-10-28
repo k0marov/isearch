@@ -65,3 +65,8 @@ class SQLiteDB(database.Database):
         self._logger.info(f'deleting image at {filepath}')
         self._db.execute('delete from images where filepath = ?', (filepath,))
         self._db.commit()
+
+    def clear_dir_embeddings(self, dir: str) -> None:
+        self._logger.info(f'deleting all dir={dir} images from db')
+        self._db.execute('delete from images where dir = ?', (dir,))
+        self._db.commit()

@@ -25,5 +25,8 @@ class InotifyInserterService(InserterService):
         self._db.delete(filepath)
 
     def reindex_full(self, dir: str) -> None:
-        # TODO: implement me
-        pass
+        self._logger.info('performing full reindex for dir {dir}')
+        self._db.clear_dir_embeddings(dir)
+        for root, _, files in os.walk(dir):
+            for filepath in files:
+                self.handle_image_upd_or_create(dir, os.path.join(root, filepath))

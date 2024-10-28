@@ -15,3 +15,7 @@ class Database(abc.ABC):
     @abc.abstractmethod
     def delete(self, filepath: str) -> None:
         pass
+
+    @abc.abstractmethod
+    def clear_dir_embeddings(self, dir: str) -> None:
+        pass
