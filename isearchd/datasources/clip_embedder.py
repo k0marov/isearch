@@ -19,8 +19,7 @@ class CLIPEmbedder(embedder.Embedder):
         emb = self.model.forward(text, self.tokenizer)
         return dto.Embedding(data=emb.detach().numpy())
 
-    def generate_embedding_image(self, image_path: str) -> dto.Embedding:
-        # TODO: error handling for non-existing file
-        image = self.preprocess(Image.open(image_path)).unsqueeze(0).to(self.device)
+    def generate_embedding_image(self, img: Image.Image) -> dto.Embedding:
+        image = self.preprocess(img).unsqueeze(0).to(self.device)
         with torch.no_grad():
             return dto.Embedding(data=self.img_model.encode_image(image)[0].detach().numpy())
