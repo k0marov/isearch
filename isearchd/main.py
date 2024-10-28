@@ -2,7 +2,7 @@ import asyncio
 import logging
 
 from api import server_impl
-from datasources import clip_embedder, database
+from datasources import clip_embedder, database, inotify_watcher
 from domain import config
 from domain.service import search, inserter
 
@@ -19,11 +19,12 @@ async def main():
 
     embedder = clip_embedder.CLIPEmbedder(logger=logger.getChild('embedder'))
     searcher = search.SearchServiceImpl(logger=logger.getChild('searcher'), db=db, emb=embedder)
-    image_inserter = inserter.InotifyInserterService(logger=logger.getChild('inserter'), dir_path=cfg.img_dir, db=db, emb=embedder)
+    image_inserter = inserter.InotifyInserterService(logger=logger.getChild('inserter'), db=db, emb=embedder)
+    watcher = inotify_watcher.InotifyWatcherImpl(logger=logger.getChild('inotify_watcher'), dir_path=cfg.img_dir, inserter=image_inserter)
 
     server = server_impl.SocketServerImpl(logger.getChild('server'), cfg, searcher)
 
-    await asyncio.gather(server.start(), image_inserter.start())
+    await asyncio.gather(server.start(), watcher.start())
 
 
 if __name__ == '__main__':
