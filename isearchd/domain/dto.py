@@ -1,9 +1,10 @@
 import dataclasses
+import numpy as np
 
 
 @dataclasses.dataclass
 class Embedding:
-    data: bytes # TODO: use correct type
+    data: np.array
 
 @dataclasses.dataclass
 class VectorSearchQuery:

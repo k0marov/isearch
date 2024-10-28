@@ -43,7 +43,7 @@ $ isearch 'мемы с котиками'
 - [x] isearch CLI  
 - [x] Интеграция isearch и isearchd через Unix-сокет
 - [ ] isearchd: прослушивание ивентов из inotify 
-- [ ] isearchd: обёртка для CLIP 
+- [x] isearchd: обёртка для CLIP 
 - [ ] isearchd: обёртка для бд и поиска 
 
 ### Допзадачи 
