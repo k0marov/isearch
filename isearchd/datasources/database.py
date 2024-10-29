@@ -37,11 +37,13 @@ class SQLiteDB(database.Database):
             select
               dir,
               filepath,
-              vec_distance_L2(embedding, :emb) as distance
+              vec_distance_L1(embedding, :emb) as distance
             from images
             order by distance
             limit 10;
         ''', {'emb': query.embedding.data.astype(np.float32)}).fetchall() # TODO: make 10 a variable
+        for _, filepath, dist in rows:
+            print(filepath, dist)
         return dto.SearchResult(filepaths=[filepath for _, filepath, _ in rows])
 
     def update_or_create(self, image: entities.Image) -> None:

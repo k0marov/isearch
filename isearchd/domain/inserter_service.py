@@ -1,4 +1,6 @@
 import abc
+import typing
+
 
 class InserterService(abc.ABC):
     @abc.abstractmethod
@@ -10,5 +12,5 @@ class InserterService(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def reindex_full(self, dir: str) -> None:
+    def reindex_full(self, dir: str) -> typing.Generator[tuple[int, int], None, None]:
         pass
