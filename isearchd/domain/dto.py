@@ -16,7 +16,7 @@ class VectorSearchQuery:
 @dataclasses.dataclass
 class SearchQuery:
     text: str
-    count: typing.Optional[int]
+    count: int
 
 @dataclasses.dataclass
 class SearchResult:

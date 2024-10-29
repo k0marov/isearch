@@ -27,9 +27,11 @@ class SocketServerImpl(SocketServer):
         #     input += (await reader.read(RECV_SIZE)).decode()
 
         self._logger.debug(f'got message "{input}"')
-        if input.startswith('search:'):
-            query = input.removeprefix('search:')
-            result = self._searcher.search(dto.SearchQuery(text=query, count=None))
+        if input.startswith('search:'): # search:5:prompt
+            args = input.removeprefix('search:')
+            count, text = args.split(':', maxsplit=1)
+            query = dto.SearchQuery(text=text, count=int(count))
+            result = self._searcher.search(query)
             output = '\n'.join(result.filepaths)
             self._logger.debug(f'answering with "{output}"')
             writer.write(output.encode())
