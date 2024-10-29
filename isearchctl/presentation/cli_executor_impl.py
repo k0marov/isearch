@@ -1,19 +1,21 @@
 from progress.bar import Bar
 
-from domain.executor import CLIExecutor
-from domain.provider import DaemonProvider
+from domain.interfaces.executor import CLIExecutor
+from domain.interfaces.provider import DaemonProvider
 from domain.config import Config
 
 
 
 HELP_MSG = \
-'''Usage: isearchctl [OPTIONS] 
+'''Usage: isearchctl [OPTIONS] SUBCOMMAND 
 Configuration and management utility for isearch system. 
 
 Options: 
     -h, --help             show this help 
     --info                 print config info 
-    --reindex DIR          trigger reindexing for DIR
+    
+Subcommands: 
+    reindex DIR            trigger reindexing for DIR
 '''
 
 class CLIExecutorImpl(CLIExecutor):
@@ -32,7 +34,7 @@ class CLIExecutorImpl(CLIExecutor):
             return self._help()
         if args[0] == '--info':
             self._info()
-        elif args[0] == '--reindex' and len(args) > 1:
+        elif args[0] == 'reindex' and len(args) > 1:
             await self._reindex(args[1])
         else:
             self._help()

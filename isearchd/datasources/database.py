@@ -5,7 +5,8 @@ import sqlite3
 import sqlite_vec
 
 
-from domain import database, entities, dto
+from domain import entities, dto
+from domain.interfaces import database
 
 EMBEDDING_SHAPE = 640
 
@@ -42,8 +43,6 @@ class SQLiteDB(database.Database):
             order by distance
             limit :count;
         ''', {'emb': query.embedding.data.astype(np.float32), 'count': query.count}).fetchall()
-        for _, filepath, dist in rows:
-            print(filepath, dist)
         return dto.SearchResult(filepaths=[filepath for _, filepath, _ in rows])
 
     def update_or_create(self, image: entities.Image) -> None:

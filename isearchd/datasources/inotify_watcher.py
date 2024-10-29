@@ -4,8 +4,8 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent, FileDeletedEvent
 import watchdog.events
 
-from domain.fs_watcher import  FSWatcher
-from domain.inserter_service import InserterService
+from domain.interfaces.fs_watcher import  FSWatcher
+from domain.interfaces.inserter_service import InserterService
 
 class InotifyWatcherImpl(FSWatcher):
     def __init__(self, logger: logging.Logger, dir_path: str, inserter: InserterService):

@@ -3,8 +3,9 @@ import os.path
 import typing
 
 from PIL import Image
-from domain import database, entities, embedder
-from domain.inserter_service import  InserterService
+from domain import entities
+from domain.interfaces import database, embedder
+from domain.interfaces.inserter_service import  InserterService
 
 class InotifyInserterService(InserterService):
     def __init__(self, logger: logging.Logger, db: database.Database, emb: embedder.Embedder):

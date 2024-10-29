@@ -7,6 +7,10 @@ class Config:
     socket_path: str
     db_path: str
     img_dir: str
+    is_debug: bool
+
+def get_is_debug() -> bool:
+    return os.getenv('ISEARCHD_DEBUB') is not None
 
 def get_socket_path() -> str:
     return os.getenv('ISEARCHD_SOCKET') or os.path.expanduser('~/.cache/isearch/isearchd.sock')
