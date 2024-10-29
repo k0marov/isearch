@@ -1,8 +1,9 @@
 import asyncio
 import logging
+import os
 
 from api import server_impl
-from datasources import clip_embedder, database, inotify_watcher
+from datasources import database, inotify_watcher
 from domain import config
 from domain.service import search, inserter
 
@@ -14,18 +15,25 @@ async def main():
         socket_path=config.get_socket_path(),
         db_path=config.get_db_path(),
         img_dir=config.get_default_watching_dir(),
+        is_debug=config.get_is_debug(),
     )
     db = database.SQLiteDB(logger=logger.getChild('database'), db_path=cfg.db_path)
 
-    embedder = clip_embedder.CLIPEmbedder(logger=logger.getChild('embedder'))
+    if os.getenv('ISEARCH_TEST') is not None:
+        from datasources import fake_embedder
+        embedder = fake_embedder.FakeEmbedder(logger.getChild('embedder'))
+    else:
+        from datasources import clip_embedder
+        embedder = clip_embedder.CLIPEmbedder(logger=logger.getChild('embedder'))
+
     searcher = search.SearchServiceImpl(logger=logger.getChild('searcher'), db=db, emb=embedder)
     image_inserter = inserter.InotifyInserterService(logger=logger.getChild('inserter'), db=db, emb=embedder)
     watcher = inotify_watcher.InotifyWatcherImpl(logger=logger.getChild('inotify_watcher'), dir_path=cfg.img_dir, inserter=image_inserter)
 
     server = server_impl.SocketServerImpl(logger.getChild('server'), cfg, searcher, image_inserter)
 
-    for processed, total in image_inserter.reindex_full(cfg.img_dir):
-        print(processed, '/', total)
+    # for processed, total in image_inserter.reindex_full(cfg.img_dir):
+    #     print(processed, '/', total)
 
     await asyncio.gather(server.start(), watcher.start())
 

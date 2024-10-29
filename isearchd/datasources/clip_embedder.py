@@ -6,7 +6,9 @@ import transformers
 import open_clip
 import torch
 
-from domain import embedder, dto
+from domain import dto
+from domain.interfaces import embedder
+
 
 class CLIPEmbedder(embedder.Embedder):
     def __init__(self, logger: logging.Logger):

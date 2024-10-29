@@ -1,5 +1,5 @@
-from domain.executor import CLIExecutor
-from domain.provider import DaemonProvider, SearchQuery
+from domain.interfaces.executor import CLIExecutor
+from domain.interfaces.provider import DaemonProvider, SearchQuery
 from domain.config import Config
 
 

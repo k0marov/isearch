@@ -1,9 +1,10 @@
 import asyncio
 import logging
 
-from domain import config, search_service, dto
-from domain.inserter_service import InserterService
-from domain.server import SocketServer
+from domain import config, dto
+from domain.interfaces import search_service
+from domain.interfaces.inserter_service import InserterService
+from domain.interfaces.server import SocketServer
 
 RECV_SIZE = 1024
 

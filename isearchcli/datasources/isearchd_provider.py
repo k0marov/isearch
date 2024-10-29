@@ -1,8 +1,6 @@
 import asyncio
-import socket
-import typing
 
-from domain.provider import DaemonProvider, SearchQuery, SearchResult
+from domain.interfaces.provider import DaemonProvider, SearchQuery, SearchResult
 
 RECV_SIZE = 1024
 DEFAULT_IMAGE_COUNT = 10

@@ -1,9 +1,7 @@
-import typing
-
 from datasources import isearchd_provider
 from domain.config import Config
 from presentation import cli_executor_impl
-from domain.executor import CLIExecutor
+from domain.interfaces.executor import CLIExecutor
 
 
 def Init(cfg: Config) -> CLIExecutor:

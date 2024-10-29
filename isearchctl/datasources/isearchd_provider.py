@@ -1,7 +1,7 @@
 import asyncio
 import typing
 
-from domain.provider import DaemonProvider
+from domain.interfaces.provider import DaemonProvider
 
 RECV_SIZE = 1024
 
