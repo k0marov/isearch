@@ -7,12 +7,14 @@ from domain.config import Config
 
 
 HELP_MSG = \
-'''Usage: isearch [OPTIONS] QUERY 
+'''Usage: isearch [OPTIONS] [QUERY]
 Semantic image search CLI 
 
 Options: 
-    -h, --help      show this help 
-    --info          print config info 
+    -h, --help             show this help 
+    --info                 print config info 
+    --reindex DIR          trigger reindexing for selected dir 
+    -n INT                 specify amount of pictures to get. Defaults to 10 
 '''
 
 class CLIExecutorImpl(CLIExecutor):
@@ -29,15 +31,14 @@ class CLIExecutorImpl(CLIExecutor):
     async def execute(self, args: list[str]) -> None:
         if not args:
             return self._help()
-        if args[0].startswith('-'):
-            if args[0] == '--info':
-                self._info()
-            elif args[0] == '--reindex' and len(args) > 1:
-                await self._reindex(args[1])
-            else:
-                self._help()
+        if args[0] == '--info':
+            self._info()
             return
-        return self._search(args[0])
+        elif args[0] == '--reindex' and len(args) > 1:
+            await self._reindex(args[1])
+            return
+
+        return self._search(args)
 
     async def _reindex(self, dir: str) -> None:
         progress_gen = self._provider.reindex(dir)
@@ -49,8 +50,12 @@ class CLIExecutorImpl(CLIExecutor):
         bar.finish()
 
 
-    def _search(self, text: str) -> None:
-        query = SearchQuery(text=text)
+    def _search(self, args: list[str]) -> None:
+        count = None
+        if args[0] == '-n':
+            count = int(args[1])
+            args = args[2:]
+        query = SearchQuery(n=count, text=' '.join(args))
         results = self._provider.search(query)
         for filepath in results.filepaths:
             print(filepath)

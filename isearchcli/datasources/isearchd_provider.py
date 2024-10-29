@@ -5,6 +5,7 @@ import typing
 from domain.provider import SearchProvider, SearchQuery, SearchResult
 
 RECV_SIZE = 1024
+DEFAULT_IMAGE_COUNT = 10
 
 class SearchProviderImpl(SearchProvider):
     def __init__(self, socket_addr: str) -> None:
@@ -14,7 +15,8 @@ class SearchProviderImpl(SearchProvider):
         client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         client.connect(self._socket_addr)
 
-        to_send = f'search:{query.text}'
+        count = query.n or DEFAULT_IMAGE_COUNT
+        to_send = f'search:{count}:{query.text}'
         client.send(to_send.encode())
         result = ''
         while data := client.recv(RECV_SIZE):
