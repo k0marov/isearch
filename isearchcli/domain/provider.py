@@ -1,5 +1,4 @@
 import abc
-import asyncio
 import typing
 from dataclasses import dataclass
 
@@ -15,11 +14,7 @@ class SearchResult:
     filepaths: list[str]
 
 
-class SearchProvider(abc.ABC):
+class DaemonProvider(abc.ABC):
     @abc.abstractmethod
     async def search(self, query: SearchQuery) -> SearchResult:
-        pass
-
-    @abc.abstractmethod
-    async def reindex(self, dir: str) -> typing.AsyncGenerator[tuple[int, int], None]:
         pass

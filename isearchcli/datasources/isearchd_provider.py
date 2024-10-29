@@ -2,12 +2,12 @@ import asyncio
 import socket
 import typing
 
-from domain.provider import SearchProvider, SearchQuery, SearchResult
+from domain.provider import DaemonProvider, SearchQuery, SearchResult
 
 RECV_SIZE = 1024
 DEFAULT_IMAGE_COUNT = 10
 
-class SearchProviderImpl(SearchProvider):
+class DaemonProviderImpl(DaemonProvider):
     def __init__(self, socket_addr: str) -> None:
         self._socket_addr = socket_addr
 
@@ -26,19 +26,3 @@ class SearchProviderImpl(SearchProvider):
         await writer.wait_closed()
 
         return SearchResult(filepaths=result.split('\n'))
-
-    async def reindex(self, dir: str) -> typing.AsyncGenerator[tuple[int, int], None]:
-        reader, writer = await asyncio.open_unix_connection(self._socket_addr)
-
-        to_send = f'reindex:{dir}'
-        writer.write(to_send.encode())
-        await writer.drain()
-
-        while (progress := await reader.readuntil('\n'.encode())):
-            curr, total = map(int, progress.decode().split('/'))
-            yield curr, total
-            if curr == total:
-                break
-
-        writer.close()
-        await writer.wait_closed()
