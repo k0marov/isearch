@@ -29,7 +29,7 @@ class SocketServerImpl(SocketServer):
         self._logger.debug(f'got message "{input}"')
         if input.startswith('search:'):
             query = input.removeprefix('search:')
-            result = self._searcher.search(dto.SearchQuery(text=query))
+            result = self._searcher.search(dto.SearchQuery(text=query, count=None))
             output = '\n'.join(result.filepaths)
             self._logger.debug(f'answering with "{output}"')
             writer.write(output.encode())

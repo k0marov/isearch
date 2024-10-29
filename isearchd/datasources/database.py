@@ -40,8 +40,8 @@ class SQLiteDB(database.Database):
               vec_distance_L1(embedding, :emb) as distance
             from images
             order by distance
-            limit 10;
-        ''', {'emb': query.embedding.data.astype(np.float32)}).fetchall() # TODO: make 10 a variable
+            limit :count;
+        ''', {'emb': query.embedding.data.astype(np.float32), 'count': query.count}).fetchall()
         for _, filepath, dist in rows:
             print(filepath, dist)
         return dto.SearchResult(filepaths=[filepath for _, filepath, _ in rows])

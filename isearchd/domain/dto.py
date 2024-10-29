@@ -1,4 +1,6 @@
 import dataclasses
+import typing
+
 import numpy as np
 
 
@@ -9,10 +11,12 @@ class Embedding:
 @dataclasses.dataclass
 class VectorSearchQuery:
     embedding: Embedding
+    count: int
 
 @dataclasses.dataclass
 class SearchQuery:
     text: str
+    count: typing.Optional[int]
 
 @dataclasses.dataclass
 class SearchResult:
