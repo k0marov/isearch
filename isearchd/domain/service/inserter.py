@@ -34,6 +34,6 @@ class InotifyInserterService(InserterService):
             for filename in files:
                 filepath = os.path.join(root, filename)
                 self._logger.info(f'found file for reindex at {filepath}')
-                self.handle_image_upd_or_create(dir, filename)
+                self.handle_image_upd_or_create(dir, filepath)
                 processed_count += 1
                 yield processed_count, total_files_count
