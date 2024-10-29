@@ -2,50 +2,33 @@ import logging
 import os.path
 
 from PIL import Image
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler, FileSystemEvent
-import watchdog.events
-
-
 from domain import database, entities, embedder
 from domain.inserter_service import  InserterService
 
 class InotifyInserterService(InserterService):
-    def __init__(self, logger: logging.Logger, dir_path: str, db: database.Database, emb: embedder.Embedder):
+    def __init__(self, logger: logging.Logger, db: database.Database, emb: embedder.Embedder):
         self._logger = logger
-        self._dir_path = dir_path
         self._db = db
         self._emb = emb
-        self._logger = logger
 
-    def _handle_event(self, event: FileSystemEvent) -> None:
-        self._logger.info(f'got event {event}')
-        img_path = event.dest_path if event.event_type == watchdog.events.EVENT_TYPE_MOVED else event.src_path
+    def handle_image_upd_or_create(self, dir: str, filepath: str) -> None:
         try:
-            img = Image.open(img_path)
+            img = Image.open(filepath)
             img.load()
         except Exception as e:
             self._logger.debug(f'failed opening file as image: {e}')
             return
-        self._insert_image(img_path, img)
-
-    def _insert_image(self, path: str, img: Image.Image):
         embedding = self._emb.generate_embedding_image(img)
-        self._db.insert(entities.Image(filepath=path, emb=embedding))
+        self._db.update_or_create(entities.Image(watched_dir=dir, filepath=filepath, emb=embedding))
 
+    def handle_deletion(self, filepath: str):
+        self._db.delete(filepath)
 
-    async def start(self) -> None:
-        class Handler(FileSystemEventHandler):
-            def on_any_event(self_, event: FileSystemEvent) -> None:
-                self._handle_event(event)
-
-        observer = Observer()
-        observer.schedule(Handler(), self._dir_path, recursive=True, event_filter=(
-            watchdog.events.FileCreatedEvent,
-            watchdog.events.FileMovedEvent,
-            watchdog.events.FileModifiedEvent,
-        ))
-
-        self._logger.info(f'started watching {self._dir_path}')
-
-        observer.start()
+    def reindex_full(self, dir: str) -> None:
+        self._logger.info(f'performing full reindex for dir {dir}')
+        self._db.clear_dir_embeddings(dir)
+        for root, _, files in os.walk(dir):
+            for filename in files:
+                filepath =os.path.join(root, filename)
+                self._logger.info(f'found file for reindex at {filepath}')
+                self.handle_image_upd_or_create(dir, filename)
