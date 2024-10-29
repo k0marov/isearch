@@ -11,12 +11,15 @@ from domain import embedder, dto
 class CLIPEmbedder(embedder.Embedder):
     def __init__(self, logger: logging.Logger):
         self._logger = logger
+        self._logger.info('loading CLIP embedder...')
         self._model = pt_multilingual_clip.MultilingualCLIP.from_pretrained('M-CLIP/XLM-Roberta-Large-Vit-B-16Plus')
         self._tokenizer = transformers.AutoTokenizer.from_pretrained('M-CLIP/XLM-Roberta-Large-Vit-B-16Plus')
         self._device = "cuda" if torch.cuda.is_available() else "cpu"
         self._img_model, _, self.preprocess = open_clip.create_model_and_transforms('ViT-B-16-plus-240',
                                                                                     pretrained="laion400m_e32")
         self._img_model.to(self._device)
+
+        self._logger.info('successfully loaded embedder')
 
     def generate_embedding_text(self, text: str) -> dto.Embedding:
         emb = self._model.forward(text, self._tokenizer)
