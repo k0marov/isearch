@@ -1,5 +1,6 @@
 import logging
 import os.path
+import typing
 
 from PIL import Image
 from domain import database, entities, embedder
@@ -24,11 +25,15 @@ class InotifyInserterService(InserterService):
     def handle_deletion(self, filepath: str):
         self._db.delete(filepath)
 
-    def reindex_full(self, dir: str) -> None:
+    def reindex_full(self, dir: str) -> typing.Generator[tuple[int, int], None, None]:
         self._logger.info(f'performing full reindex for dir {dir}')
         self._db.clear_dir_embeddings(dir)
+        total_files_count = sum([len(files) for _, _, files in os.walk(dir)])
+        processed_count = 0
         for root, _, files in os.walk(dir):
             for filename in files:
-                filepath =os.path.join(root, filename)
+                filepath = os.path.join(root, filename)
                 self._logger.info(f'found file for reindex at {filepath}')
                 self.handle_image_upd_or_create(dir, filename)
+                processed_count += 1
+                yield processed_count, total_files_count
