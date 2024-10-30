@@ -3,7 +3,6 @@ import typing
 
 from domain.interfaces.provider import DaemonProvider
 
-RECV_SIZE = 1024
 
 class DaemonProviderImpl(DaemonProvider):
     def __init__(self, socket_addr: str) -> None:

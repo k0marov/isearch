@@ -8,3 +8,4 @@ class Image:
     filepath: str
     watched_dir: str
     emb: dto.Embedding
+
