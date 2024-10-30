@@ -47,7 +47,7 @@ cp tests/fixtures/test_image.png $ISEARCHD_IMAGES_DIR/subdir/subfile.png
 
 # create another test dir
 mkdir $tmp_dir/another_dir
-cp tests/test_image.png $tmp_dir/another_dir/img.png
+cp tests/fixtures/test_image.png $tmp_dir/another_dir/img.png
 
 echo "Running reindex with isearchctl for another test dir"
 cd isearchctl
