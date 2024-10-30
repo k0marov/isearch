@@ -44,11 +44,11 @@ ISEARCHD_IMAGES_DIR=$HOME/Images_test python3 main.py
 
 Кроме того, он прослушивает подключения и запросы по сокету `~/.cache/isearch/isearchd.sock`.
 
-Оба этих пути можно изменить через переменные окружения, см. [isearchd/README.md]().
+Оба этих пути можно изменить через переменные окружения, см. [](isearchd/README.md).
 
 #### 4. Использование isearchcli и isearchctl (в другом терминале)
 
-Для начала перместим несколько тестовых изображений в папку (их можно взять из [docs/sample_images]()):
+Для начала перместим несколько тестовых изображений в папку (их можно взять из [](docs/sample_images)):
 ```bash
 cp docs/sample_images/{dog1,dog2,human,cat,cat2,cat_meme1,cat_meme2}.png ~/Images_test 
 ```
@@ -84,4 +84,3 @@ python3 main.py reindex ~/Images_test2
 Должен отображаться прогресс, получаемый в реалтайме из `isearchd` по сокету.
 
 Теперь то, что изображения были проиндексированы, можно проверить через `isearchcli`. 
-
