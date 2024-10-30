@@ -5,6 +5,7 @@ from domain.interfaces.provider import DaemonProvider, SearchQuery, SearchResult
 RECV_SIZE = 1024
 DEFAULT_IMAGE_COUNT = 10
 
+
 class DaemonProviderImpl(DaemonProvider):
     def __init__(self, socket_addr: str) -> None:
         self._socket_addr = socket_addr
@@ -24,3 +25,4 @@ class DaemonProviderImpl(DaemonProvider):
         await writer.wait_closed()
 
         return SearchResult(filepaths=result.split('\n'))
+

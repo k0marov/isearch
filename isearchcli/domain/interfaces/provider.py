@@ -18,3 +18,4 @@ class DaemonProvider(abc.ABC):
     @abc.abstractmethod
     async def search(self, query: SearchQuery) -> SearchResult:
         pass
+
