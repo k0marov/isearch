@@ -37,19 +37,19 @@ sleep 2
 cd ..
 
 echo "Creating test images"
-cp tests/test_image.png $ISEARCHD_IMAGES_DIR/1.png
-cp tests/test_image.png $ISEARCHD_IMAGES_DIR/2.png
-cp tests/test_image.png $ISEARCHD_IMAGES_DIR/3.png
+cp tests/fixtures/test_image.png $ISEARCHD_IMAGES_DIR/1.png
+cp tests/fixtures/test_image.png $ISEARCHD_IMAGES_DIR/2.png
+cp tests/fixtures/test_image.png $ISEARCHD_IMAGES_DIR/3.png
 sleep 1
 rm $ISEARCHD_IMAGES_DIR/1.png
 mkdir $ISEARCHD_IMAGES_DIR/subdir
-cp tests/test_image.png $ISEARCHD_IMAGES_DIR/subdir/subfile.png
+cp tests/fixtures/test_image.png $ISEARCHD_IMAGES_DIR/subdir/subfile.png
 
 # create another test dir
 mkdir $tmp_dir/another_dir
-cp tests/test_image.png $tmp_dir/another_dir/img.png
+cp tests/fixtures/test_image.png $tmp_dir/another_dir/img.png
 
-echo "Running reindex with isearchctl"
+echo "Running reindex with isearchctl for another test dir"
 cd isearchctl
 python3 -m venv $tmp_dir/ctl_venv
 source $tmp_dir/ctl_venv/bin/activate
@@ -57,7 +57,7 @@ pip install -q -q -r requirements.txt
 python3 main.py reindex $tmp_dir/another_dir
 cd ..
 
-echo "Starting and stopping isearchd to check db"
+echo "Starting and stopping isearchd to check db persistence"
 kill $isearchd_pid
 cd isearchd
 python3 -m venv $tmp_dir/isearchd_venv

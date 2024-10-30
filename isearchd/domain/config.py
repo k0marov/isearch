@@ -19,4 +19,4 @@ def get_db_path() -> str:
     return os.getenv('ISEARCHD_DB') or os.path.expanduser('~/.cache/isearch/db.sqlite3')
 
 def get_default_watching_dir() -> str:
-    return os.getenv('ISEARCHD_IMAGES_DIR') or os.path.expanduser('~/Pictures/')
+    return os.path.expanduser(os.getenv('ISEARCHD_IMAGES_DIR')) or os.path.expanduser('~/Pictures/')
