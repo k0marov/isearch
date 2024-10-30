@@ -12,7 +12,7 @@ class FakeEmbedder(embedder.Embedder):
         self._logger = logger
 
     def generate_embedding_text(self, _: str) -> dto.Embedding:
-        return dto.Embedding(data=numpy.random.random(size=(1, 640)))
+        return dto.Embedding(data=numpy.random.random(size=(1, dto.CLIP_EMBEDDING_SIZE)))
 
     def generate_embedding_image(self, _: Image.Image) -> dto.Embedding:
-        return dto.Embedding(data=numpy.random.random(size=(1, 640)))
+        return dto.Embedding(data=numpy.random.random(size=(1, dto.CLIP_EMBEDDING_SIZE)))
