@@ -3,9 +3,11 @@ import os.path
 import typing
 
 from PIL import Image
+
 from domain import entities
 from domain.interfaces import database, embedder
-from domain.interfaces.inserter_service import  InserterService
+from domain.interfaces.inserter_service import InserterService
+
 
 class InotifyInserterService(InserterService):
     def __init__(self, logger: logging.Logger, db: database.Database, emb: embedder.Embedder):
@@ -21,7 +23,8 @@ class InotifyInserterService(InserterService):
             self._logger.debug(f'failed opening file as image: {e}')
             return
         embedding = self._emb.generate_embedding_image(img)
-        self._db.update_or_create(entities.Image(watched_dir=dir, filepath=filepath, emb=embedding))
+        self._db.update_or_create(entities.Image(
+            watched_dir=dir, filepath=filepath, emb=embedding))
 
     def handle_deletion(self, filepath: str):
         self._db.delete(filepath)
@@ -38,3 +41,4 @@ class InotifyInserterService(InserterService):
                 self.handle_image_upd_or_create(dir, filepath)
                 processed_count += 1
                 yield processed_count, total_files_count
+

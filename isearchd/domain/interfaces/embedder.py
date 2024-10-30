@@ -13,3 +13,4 @@ class Embedder(abc.ABC):
     @abc.abstractmethod
     def generate_embedding_image(self, img: Image) -> dto.Embedding:
         pass
+

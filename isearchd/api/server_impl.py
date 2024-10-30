@@ -8,6 +8,7 @@ from domain.interfaces.server import SocketServer
 
 RECV_SIZE = 1024
 
+
 class SocketServerImpl(SocketServer):
     def __init__(self, logger: logging.Logger, cfg: config.Config, searcher: search_service.SearchService, inserter: InserterService):
         self._cfg = cfg
@@ -28,7 +29,7 @@ class SocketServerImpl(SocketServer):
         #     input += (await reader.read(RECV_SIZE)).decode()
 
         self._logger.debug(f'got message "{input}"')
-        if input.startswith('search:'): # search:5:prompt
+        if input.startswith('search:'):  # search:5:prompt
             args = input.removeprefix('search:')
             count, text = args.split(':', maxsplit=1)
             query = dto.SearchQuery(text=text, count=int(count))
@@ -38,7 +39,8 @@ class SocketServerImpl(SocketServer):
             writer.write(output.encode())
         elif input.startswith('reindex:'):
             dir = input.removeprefix('reindex:')
-            self._logger.info('performing reindex because of socket request', extra={'dir': dir})
+            self._logger.info(
+                'performing reindex because of socket request', extra={'dir': dir})
             for curr_progress, total in self._inserter.reindex_full(dir):
                 writer.write(f'{curr_progress}/{total}\n'.encode())
         else:
@@ -46,3 +48,4 @@ class SocketServerImpl(SocketServer):
         await writer.drain()
         writer.close()
         await writer.wait_closed()
+

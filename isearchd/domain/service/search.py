@@ -9,6 +9,7 @@ class SearchServiceImpl(search_service.SearchService):
         self._logger = logger
         self._db = db
         self._emb = emb
+
     def search(self, query: dto.SearchQuery) -> dto.SearchResult:
         text_emb = self._emb.generate_embedding_text(query.text)
         return self._db.search(dto.VectorSearchQuery(embedding=text_emb, count=query.count))
