@@ -43,7 +43,7 @@ class CLIExecutorImpl(CLIExecutor):
         progress_gen = self._provider.reindex(dir)
         bar = Bar('Reindexing',
                   suffix='%(index)d/%(max)d %(elapsed_td)s - %(eta_td)s')
-        async for curr, total in await progress_gen:
+        async for curr, total in progress_gen:
             bar.index = curr
             bar.max = total
 
