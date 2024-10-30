@@ -3,6 +3,7 @@ import sys
 import di
 from domain import config
 
+
 async def main():
     cfg = config.Config(socket_path=config.get_socket_path())
     executor = di.Init(cfg)
@@ -10,3 +11,4 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
+
