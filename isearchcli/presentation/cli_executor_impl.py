@@ -1,3 +1,4 @@
+"""Module with implementation for the CLI abstraction."""
 from domain.interfaces.executor import CLIExecutor
 from domain.interfaces.provider import DaemonProvider, SearchQuery
 from domain.config import Config

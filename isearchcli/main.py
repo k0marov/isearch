@@ -1,3 +1,4 @@
+"""Main entrypoint for isearchcli."""
 import asyncio
 import sys
 import di

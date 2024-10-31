@@ -1,3 +1,4 @@
+"""Module with implementation of isearchd wrapper using sockets."""
 import asyncio
 
 from domain.interfaces.provider import DaemonProvider, SearchQuery, SearchResult

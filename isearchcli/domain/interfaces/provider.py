@@ -1,3 +1,4 @@
+"""Module with definition of interface for isearchd wrapper."""
 import abc
 import typing
 from dataclasses import dataclass
