@@ -1,3 +1,4 @@
+"""Module with implementation for the SearchService."""
 import logging
 
 from domain import dto

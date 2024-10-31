@@ -1,3 +1,4 @@
+"""Module with real implementation for domain's Database - a wrapper around SQLite3."""
 import logging
 
 import numpy as np

@@ -1,3 +1,4 @@
+"""Module with interface for socket server."""
 import abc
 
 

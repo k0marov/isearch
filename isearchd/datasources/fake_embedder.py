@@ -1,3 +1,4 @@
+"""Module with stub implementation of domain's Embedder needed for tests."""
 import logging
 
 import numpy.random

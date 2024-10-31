@@ -1,3 +1,4 @@
+"""Main entrypoint module for isearchd."""
 import asyncio
 import logging
 

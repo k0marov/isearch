@@ -1,3 +1,4 @@
+"""Module with interface for a wrapper for ML embedding model."""
 import abc
 
 from PIL.Image import Image

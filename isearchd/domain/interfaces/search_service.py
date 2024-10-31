@@ -1,3 +1,4 @@
+"""Module with interface for main searching service."""
 import abc
 
 from domain import dto

@@ -1,3 +1,4 @@
+"""Module with real implementation of domain's FSWatcher using watchdog."""
 import logging
 
 from watchdog.observers import Observer

@@ -1,3 +1,4 @@
+"""Module with interface for a wrapper for DB that is required for business logic."""
 import abc
 
 from domain import dto, entities
