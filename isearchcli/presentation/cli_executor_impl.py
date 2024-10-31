@@ -11,7 +11,7 @@ Depends on a daemon running in the background. See isearchd
 Options:
     -h, --help             show this help
     --info                 print config info
-    --reindex DIR          trigger reindexing for selected dir
+    --reindex DIR          trigger recursive reindexing for selected dir
     -n INT                 specify amount of pictures to get. Defaults to 10
 '''
 

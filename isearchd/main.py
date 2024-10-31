@@ -35,7 +35,11 @@ async def _main():
 
     searcher = search.SearchServiceImpl(logger=logger.getChild('searcher'), db=db, emb=embedder)
     image_inserter = inserter.InotifyInserterService(logger=logger.getChild('inserter'), db=db, emb=embedder)
-    watcher = inotify_watcher.InotifyWatcherImpl(logger=logger.getChild('inotify_watcher'), dir_path=cfg.img_dir, inserter=image_inserter)
+    watcher = inotify_watcher.InotifyWatcherImpl(
+        logger=logger.getChild('inotify_watcher'),
+        dir_path=cfg.img_dir,
+        inserter=image_inserter
+    )
 
     server = server_impl.SocketServerImpl(logger.getChild('server'), cfg, searcher, image_inserter)
 
