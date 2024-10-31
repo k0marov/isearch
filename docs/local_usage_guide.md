@@ -46,11 +46,15 @@ ISEARCHD_IMAGES_DIR=$HOME/Images_test python3 main.py
 
 Оба этих пути можно изменить через переменные окружения, см. [isearchd/README.md](../isearchd/README.md).
 
-#### 4. Использование isearchcli и isearchctl (в другом терминале)
+### 3. Использование isearchcli и isearchctl (в другом терминале)
 
-Для начала переместим несколько тестовых изображений в папку (их можно взять из [docs/sample_images/](../docs/sample_images/)):
+Для начала переместим несколько тестовых изображений в папку. 
+Для удобства их можно взять из [docs/sample_images/](../docs/sample_images/) 
+(эта папка находится в ветке `extra/sample_images`, чтобы не захламлять ветки разработки):
 ```bash
-cp docs/sample_images/{dog1,dog2,human,cat,cat2,cat_meme1,cat_meme2}.png ~/Images_test 
+git checkout extra/sample_images 
+cp docs/sample_images/{dog1,dog2,human,cat,cat2,cat_meme,cat_meme2}.png ~/Images_test 
+git checkout v0.1.0
 ```
 
 Они должны проиндексироваться isearchd, это должно быть видно из логов.
@@ -64,7 +68,8 @@ python3 main.py 'котик'
 python3 main.py -n 3 'человек'
 ```
 
-Теперь проверим фичу реиндексации через isearchctl - это когда мы хотим за 1 команду переиндексировать выбранную папку (и не обязательно ту, которая прослушивается).
+Теперь проверим фичу реиндексации через isearchctl - 
+это когда мы хотим за 1 команду рекурсивно переиндексировать всю выбранную папку (и не обязательно ту, которая прослушивается).
 
 Удалим несколько картинок из нашей папки, `isearchd` должен удалить их из индекса, так как прослушивает события через `inotify`:
 ```bash 
