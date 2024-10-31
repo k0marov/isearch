@@ -1,3 +1,4 @@
+"""Module with configuration utilities."""
 import os
 from dataclasses import dataclass
 

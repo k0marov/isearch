@@ -1,3 +1,4 @@
+"""Module with dependency injection utilities."""
 from datasources import isearchd_provider
 from domain.config import Config
 from presentation import cli_executor_impl

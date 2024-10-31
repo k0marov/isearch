@@ -1,3 +1,4 @@
+"""Main entrypoint for isearchctl."""
 import asyncio
 import sys
 import di

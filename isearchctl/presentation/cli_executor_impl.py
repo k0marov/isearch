@@ -1,3 +1,4 @@
+"""Module with implementation for the CLI abstraction."""
 from progress.bar import Bar
 
 from domain.interfaces.executor import CLIExecutor

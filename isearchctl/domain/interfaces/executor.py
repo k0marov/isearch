@@ -1,3 +1,4 @@
+"""Module with CLI abstraction interface."""
 import abc
 
 
