@@ -1,3 +1,4 @@
+"""Module with real implementation for the embedder - a wrapper around CLIP."""
 import logging
 
 from PIL import Image

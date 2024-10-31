@@ -1,3 +1,4 @@
+"""Module with interface for the component that monitors fs events."""
 import abc
 
 

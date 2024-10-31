@@ -1,3 +1,4 @@
+"""Module with main domain entities."""
 from dataclasses import dataclass
 
 from domain import dto

@@ -1,4 +1,5 @@
-from typing import Annotated, Literal, TypeVar
+"""Module with DTOs needed for domain logic."""
+from typing import Annotated, Literal
 import dataclasses
 
 import numpy as np

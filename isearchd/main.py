@@ -1,3 +1,4 @@
+"""Main entrypoint module for isearchd."""
 import asyncio
 import logging
 
@@ -10,9 +11,9 @@ from domain.interfaces.embedder import Embedder
 
 def _init_embedder(cfg: config.Config, logger: logging.Logger) -> Embedder:
     if cfg.is_integration_test:
-        logger.info('initializing fake embedder for test environment...')
-        from datasources import fake_embedder
-        return fake_embedder.FakeEmbedder(logger=logger)
+        logger.info('initializing stub embedder for test environment...')
+        from datasources import stub_embedder
+        return stub_embedder.StubEmbedder(logger=logger)
     else:
         logger.info('initializing clip embedder for real environment...')
         from datasources import clip_embedder
@@ -35,7 +36,11 @@ async def _main():
 
     searcher = search.SearchServiceImpl(logger=logger.getChild('searcher'), db=db, emb=embedder)
     image_inserter = inserter.InotifyInserterService(logger=logger.getChild('inserter'), db=db, emb=embedder)
-    watcher = inotify_watcher.InotifyWatcherImpl(logger=logger.getChild('inotify_watcher'), dir_path=cfg.img_dir, inserter=image_inserter)
+    watcher = inotify_watcher.InotifyWatcherImpl(
+        logger=logger.getChild('inotify_watcher'),
+        dir_path=cfg.img_dir,
+        inserter=image_inserter
+    )
 
     server = server_impl.SocketServerImpl(logger.getChild('server'), cfg, searcher, image_inserter)
 

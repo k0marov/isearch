@@ -1,3 +1,4 @@
+"""Module with interface for the main inserter service."""
 import abc
 import typing
 
