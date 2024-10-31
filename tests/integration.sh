@@ -74,7 +74,7 @@ source $tmp_dir/cli_venv/bin/activate
 pip install -q -q -r requirements.txt
 
 echo "Running isearchcli"
-python3 main.py 'some test query' | sort > /tmp/isearch_test_result.txt
+python3 main.py -n 4 'мемы с котиками' | sort > /tmp/isearch_test_result.txt
 find $tmp_dir -name '*.png' | sort > $tmp_dir/expected_output.txt
 
 set +e
