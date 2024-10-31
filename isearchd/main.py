@@ -11,9 +11,9 @@ from domain.interfaces.embedder import Embedder
 
 def _init_embedder(cfg: config.Config, logger: logging.Logger) -> Embedder:
     if cfg.is_integration_test:
-        logger.info('initializing fake embedder for test environment...')
-        from datasources import fake_embedder
-        return fake_embedder.FakeEmbedder(logger=logger)
+        logger.info('initializing stub embedder for test environment...')
+        from datasources import stub_embedder
+        return stub_embedder.StubEmbedder(logger=logger)
     else:
         logger.info('initializing clip embedder for real environment...')
         from datasources import clip_embedder
