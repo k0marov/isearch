@@ -42,6 +42,8 @@ class SocketServerImpl(SocketServer):
                 'performing reindex because of socket request', extra={'dir': dir})
             for curr_progress, total in self._inserter.reindex_full(dir):
                 writer.write(f'{curr_progress}/{total}\n'.encode())
+                await writer.drain()
+                self._logger.debug(f'written progress {curr_progress}/{total} to client')
         else:
             writer.write('error:unknown cmd'.encode())
         await writer.drain()
