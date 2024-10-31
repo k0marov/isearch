@@ -10,7 +10,7 @@ from domain.interfaces.inserter_service import InserterService
 
 
 class InotifyInserterService(InserterService):
-    def __init__(self, logger: logging.Logger, db: database.Database, emb: embedder.Embedder):
+    def __init__(self, logger: logging.Logger, db: database.Database, emb: embedder.Embedder) -> None:
         self._logger = logger
         self._db = db
         self._emb = emb
@@ -26,7 +26,7 @@ class InotifyInserterService(InserterService):
         self._db.update_or_create(entities.Image(
             watched_dir=dir, filepath=filepath, emb=embedding))
 
-    def handle_deletion(self, filepath: str):
+    def handle_deletion(self, filepath: str) -> None:
         self._db.delete(filepath)
 
     def reindex_full(self, dir: str) -> typing.Generator[tuple[int, int], None, None]:
@@ -41,4 +41,3 @@ class InotifyInserterService(InserterService):
                 self.handle_image_upd_or_create(dir, filepath)
                 processed_count += 1
                 yield processed_count, total_files_count
-

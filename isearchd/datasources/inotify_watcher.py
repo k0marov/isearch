@@ -46,5 +46,3 @@ class InotifyWatcherImpl(FSWatcher):
         self._logger.info(f'started watching {self._dir_path}')
 
         observer.start()
-        # TODO: properly close all resources
-

@@ -2,7 +2,9 @@ import abc
 
 
 class FSWatcher(abc.ABC):
+    """Responsible for subscribing to FS events and passing them to InserterService"""
     @abc.abstractmethod
-    def start(self) -> None:
+    async def start(self) -> None:
+        """Starts listening for events."""
         pass
 

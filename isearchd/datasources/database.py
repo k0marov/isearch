@@ -14,6 +14,8 @@ EMBEDDING_SHAPE = 640
 class SQLiteDB(database.Database):
     def __init__(self, logger: logging.Logger, db_path: str):
         self._logger = logger
+        self._logger.info('initializing db...')
+
         # we don't write concurrently, so it's ok to switch this to False
         self._db = sqlite3.connect(db_path, check_same_thread=False)
         self._db.enable_load_extension(True)
@@ -23,6 +25,7 @@ class SQLiteDB(database.Database):
         self._migrate()
 
     def _migrate(self):
+        self._logger.info('migrating db...')
         self._db.execute(
             '''create table if not exists images (
                 filepath varchar PRIMARY KEY,
