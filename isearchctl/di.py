@@ -5,6 +5,7 @@ from domain.interfaces.executor import CLIExecutor
 
 
 def Init(cfg: Config) -> CLIExecutor:
+    """Injects all dependencies."""
     provider = isearchd_provider.DaemonProviderImpl(cfg.socket_path)
     executor = cli_executor_impl.CLIExecutorImpl(cfg, provider)
     return executor
