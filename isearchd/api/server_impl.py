@@ -23,18 +23,17 @@ class SocketServerImpl(SocketServer):
             await server.serve_forever()
 
     async def _handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
-        input = (await reader.read(RECV_SIZE)).decode()
-        # TODO: read full input
-        # while not reader.at_eof():
-        #     input += (await reader.read(RECV_SIZE)).decode()
+        MESSAGE_LENGTH_PREFIX = 4
+        message_length_bytes = await reader.read(MESSAGE_LENGTH_PREFIX)
+        message_length = int.from_bytes(message_length_bytes, byteorder='big')
+
+        input = (await reader.read(message_length)).decode()
 
         self._logger.debug(f'got message "{input}"')
         if input.startswith('search:'):  # search:5:prompt
-            args = input.removeprefix('search:')
-            count, text = args.split(':', maxsplit=1)
+            count, text = input.removeprefix('search:').split(':', maxsplit=1)
             query = dto.SearchQuery(text=text, count=int(count))
-            result = self._searcher.search(query)
-            output = '\n'.join(result.filepaths)
+            output = '\n'.join(self._searcher.search(query).filepaths)
             self._logger.debug(f'answering with "{output}"')
             writer.write(output.encode())
         elif input.startswith('reindex:'):
@@ -48,4 +47,3 @@ class SocketServerImpl(SocketServer):
         await writer.drain()
         writer.close()
         await writer.wait_closed()
-

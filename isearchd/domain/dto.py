@@ -1,14 +1,16 @@
+from typing import Annotated, Literal, TypeVar
 import dataclasses
 
 import numpy as np
 
+CLIP_EMBEDDING_SIZE = 640
+CLIPEmbeddingType = Annotated[np.array, Literal[640]]
 
-# TODO: place embedding size constant here
 
 @dataclasses.dataclass
 class Embedding:
     """DTO for embedding."""
-    data: np.array
+    data: CLIPEmbeddingType
 
 
 @dataclasses.dataclass
@@ -29,3 +31,4 @@ class SearchQuery:
 class SearchResult:
     """DTO for returning serach results."""
     filepaths: list[str]
+

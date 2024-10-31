@@ -8,9 +8,6 @@ import sqlite_vec
 from domain import entities, dto
 from domain.interfaces import database
 
-EMBEDDING_SHAPE = 640
-
-
 class SQLiteDB(database.Database):
     def __init__(self, logger: logging.Logger, db_path: str):
         self._logger = logger
@@ -34,7 +31,7 @@ class SQLiteDB(database.Database):
                   typeof(embedding) == 'blob'
                   and vec_length(embedding) == {0}
                 )
-            )'''.format(EMBEDDING_SHAPE)  # it's not an SQL injection since it's our constant
+            )'''.format(dto.CLIP_EMBEDDING_SIZE)  # it's not an SQL injection since it's our constant
         )
 
     def search(self, query: dto.VectorSearchQuery) -> dto.SearchResult:
