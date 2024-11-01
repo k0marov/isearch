@@ -44,7 +44,7 @@ ISEARCHD_IMAGES_DIR=$HOME/Images_test python3 main.py
 
 Кроме того, он прослушивает подключения и запросы по сокету `~/.cache/isearch/isearchd.sock`.
 
-Оба этих пути можно изменить через переменные окружения, см. [isearchd/README.md](../isearchd/README.md).
+Оба этих пути можно изменить через переменные окружения, см. [isearchd/README.md](../isearchd/README.md) или `python3 main.py -h`.
 
 ### 3. Использование isearchcli и isearchctl (в другом терминале)
 
