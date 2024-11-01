@@ -1,5 +1,6 @@
 """Module with real implementation for domain's Database - a wrapper around SQLite3."""
 import logging
+import os.path
 
 import numpy as np
 import aiosqlite
@@ -12,11 +13,12 @@ from domain.interfaces import database
 class SQLiteDB(database.Database):
     def __init__(self, logger: logging.Logger, db_path: str):
         self._logger = logger
-        self._logger.info('initializing db...')
         self._db_path = db_path
 
     async def init_db(self) -> None:
         """Initialize database, load extensions, apply migrations."""
+        self._logger.info(f'initializing db at {self._db_path}...')
+        os.makedirs(os.path.dirname(self._db_path))
         self._db = await aiosqlite.connect(self._db_path)
         await self._db.enable_load_extension(True)
         await self._db.load_extension(sqlite_vec.loadable_path())
