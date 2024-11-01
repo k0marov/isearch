@@ -23,7 +23,7 @@ def _init_embedder(cfg: config.Config, logger: logging.Logger) -> Embedder:
 
 
 async def _main():
-    if sys.argv and sys.argv[1] in ('-h', '--help'):
+    if len(sys.argv) > 1 and sys.argv[1] in ('-h', '--help'):
         print(const.HELP_MSG)
         return
     cfg = config.get_config_from_env()
