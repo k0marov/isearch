@@ -41,7 +41,6 @@ mkdir ~/Images_test
 
 Запустим daemon `isearchd`, указав ему путь к этой тестовой папке.
 ```bash
-mkdir ~/Images_test
 cd isearchd 
 source venv/bin/activate 
 
