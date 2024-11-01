@@ -2,7 +2,7 @@
 import logging
 
 import numpy as np
-import sqlite3
+import aiosqlite
 import sqlite_vec
 
 
@@ -13,18 +13,20 @@ class SQLiteDB(database.Database):
     def __init__(self, logger: logging.Logger, db_path: str):
         self._logger = logger
         self._logger.info('initializing db...')
+        self._db_path = db_path
 
-        # we don't write concurrently, so it's ok to switch this to False
-        self._db = sqlite3.connect(db_path, check_same_thread=False)
-        self._db.enable_load_extension(True)
-        sqlite_vec.load(self._db)
-        self._db.enable_load_extension(False)
+    async def init_db(self) -> None:
+        self._db = await aiosqlite.connect(self._db_path)
+        await self._db.enable_load_extension(True)
+        await self._db.load_extension(sqlite_vec.loadable_path())
+        # await sqlite_vec.load(self._db)
+        await self._db.enable_load_extension(False)
 
-        self._migrate()
+        await self._migrate()
 
-    def _migrate(self):
+    async def _migrate(self):
         self._logger.info('migrating db...')
-        self._db.execute(
+        await self._db.execute(
             '''create table if not exists images (
                 filepath varchar PRIMARY KEY,
                 dir varchar,
@@ -34,14 +36,15 @@ class SQLiteDB(database.Database):
                 )
             )'''.format(dto.CLIP_EMBEDDING_SIZE)  # it's not an SQL injection since it's our constant
         )
+        await self._db.commit()
 
-    def search(self, query: dto.VectorSearchQuery) -> dto.SearchResult:
+    async def search(self, query: dto.VectorSearchQuery) -> dto.SearchResult:
         self._logger.info('performing vector search in sqlite')
         args = {
             'emb': query.embedding.data.astype(np.float32),
             'count': query.count
         }
-        rows = self._db.execute('''
+        async with self._db.execute('''
             select
               dir,
               filepath,
@@ -49,12 +52,13 @@ class SQLiteDB(database.Database):
             from images
             order by distance
             limit :count;
-        ''', args).fetchall()
-        return dto.SearchResult(filepaths=[filepath for _, filepath, _ in rows])
+        ''', args) as cursor:
+            rows = await cursor.fetchall()
+            return dto.SearchResult(filepaths=[filepath for _, filepath, _ in rows])
 
-    def update_or_create(self, image: entities.Image) -> None:
+    async def update_or_create(self, image: entities.Image) -> None:
         self._logger.info(f'update_or_create image row at {image.filepath}')
-        self._db.execute('''
+        await self._db.execute('''
             insert into images values (
                :filepath, :dir, :embedding
             )
@@ -67,14 +71,14 @@ class SQLiteDB(database.Database):
             'dir': image.watched_dir,
             'embedding': image.emb.data.astype(np.float32),
         })
-        self._db.commit()
+        await self._db.commit()
 
-    def delete(self, filepath: str) -> None:
+    async def delete(self, filepath: str) -> None:
         self._logger.info(f'deleting image at {filepath}')
-        self._db.execute('delete from images where filepath = ?', (filepath,))
-        self._db.commit()
+        await self._db.execute('delete from images where filepath = ?', (filepath,))
+        await self._db.commit()
 
-    def clear_dir_embeddings(self, dir: str) -> None:
+    async def clear_dir_embeddings(self, dir: str) -> None:
         self._logger.info(f'deleting all dir={dir} images from db')
-        self._db.execute('delete from images where dir = ?', (dir,))
-        self._db.commit()
+        await self._db.execute('delete from images where dir = ?', (dir,))
+        await self._db.commit()

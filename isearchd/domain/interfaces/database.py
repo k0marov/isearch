@@ -9,7 +9,7 @@ class Database(abc.ABC):
     It must support parallel READs. Parallel WRITEs are not required.
     """
     @abc.abstractmethod
-    def search(self, query: dto.VectorSearchQuery) -> dto.SearchResult:
+    async def search(self, query: dto.VectorSearchQuery) -> dto.SearchResult:
         """
         Perform a vector search through indexed files.
         Args:
@@ -21,7 +21,7 @@ class Database(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def update_or_create(self, image: entities.Image) -> None:
+    async def update_or_create(self, image: entities.Image) -> None:
         """
         Inserts an image along with its embedding into db.
         If image is already indexed, updates it's embedding.
@@ -31,7 +31,7 @@ class Database(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def delete(self, filepath: str) -> None:
+    async def delete(self, filepath: str) -> None:
         """
         Deletes an index for the image at provided filepath.
         If it was not indexed, does nothing.
@@ -41,7 +41,7 @@ class Database(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def clear_dir_embeddings(self, dir: str) -> None:
+    async def clear_dir_embeddings(self, dir: str) -> None:
         """
         Deletes ALL embeddings for images from the selected directory.
         Args:

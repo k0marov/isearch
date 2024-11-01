@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import time
 
 from domain import config, dto
 from domain.interfaces import search_service
@@ -22,7 +23,7 @@ class SocketServerImpl(SocketServer):
             self._logger.info('Server running...')
             await server.serve_forever()
 
-    async def _handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+    async def _handler(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
         MESSAGE_LENGTH_PREFIX = 4
         message_length_bytes = await reader.read(MESSAGE_LENGTH_PREFIX)
         message_length = int.from_bytes(message_length_bytes, byteorder='big')
@@ -31,16 +32,19 @@ class SocketServerImpl(SocketServer):
 
         self._logger.debug(f'got message "{input}"')
         if input.startswith('search:'):  # search:5:prompt
+            print('\n'*8)
+            print('\n'*8)
             count, text = input.removeprefix('search:').split(':', maxsplit=1)
             query = dto.SearchQuery(text=text, count=int(count))
-            output = '\n'.join(self._searcher.search(query).filepaths)
+            output = '\n'.join((await self._searcher.search(query)).filepaths)
             self._logger.debug(f'answering with "{output}"')
             writer.write(output.encode())
         elif input.startswith('reindex:'):
+            # await asyncio.sleep(100)
             dir = input.removeprefix('reindex:')
             self._logger.info(
                 'performing reindex because of socket request', extra={'dir': dir})
-            for curr_progress, total in self._inserter.reindex_full(dir):
+            async for curr_progress, total in self._inserter.reindex_full(dir):
                 writer.write(f'{curr_progress}/{total}\n'.encode())
                 await writer.drain()
                 self._logger.debug(f'written progress {curr_progress}/{total} to client')
