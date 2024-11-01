@@ -1,4 +1,5 @@
 """Module with real implementation of domain's FSWatcher using watchdog."""
+import asyncio
 import logging
 
 from watchdog.observers import Observer
@@ -21,20 +22,20 @@ class InotifyWatcherImpl(FSWatcher):
                 self._logger.info(f'got event {event}')
 
             def on_created(_, event: FileSystemEvent) -> None:
-                self._inserter.handle_image_upd_or_create(
-                    self._dir_path, event.src_path)
+                asyncio.run(self._inserter.handle_image_upd_or_create(
+                    self._dir_path, event.src_path))
 
             def on_modified(_, event: FileSystemEvent) -> None:
-                self._inserter.handle_image_upd_or_create(
-                    self._dir_path, event.src_path)
+                asyncio.run(self._inserter.handle_image_upd_or_create(
+                    self._dir_path, event.src_path))
 
             def on_moved(_, event: FileSystemEvent) -> None:
-                self._inserter.handle_image_upd_or_create(
-                    self._dir_path, event.dest_path)
-                self._inserter.handle_deletion(event.src_path)
+                asyncio.run(self._inserter.handle_image_upd_or_create(
+                    self._dir_path, event.dest_path))
+                asyncio.run(self._inserter.handle_deletion(event.src_path))
 
             def on_deleted(_, event: FileDeletedEvent) -> None:
-                self._inserter.handle_deletion(event.src_path)
+                asyncio.run(self._inserter.handle_deletion(event.src_path))
 
         observer = Observer()
         observer.schedule(Handler(), self._dir_path, recursive=True, event_filter=(

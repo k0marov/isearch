@@ -16,6 +16,7 @@ class SQLiteDB(database.Database):
         self._db_path = db_path
 
     async def init_db(self) -> None:
+        """Initialize database, load extensions, apply migrations."""
         self._db = await aiosqlite.connect(self._db_path)
         await self._db.enable_load_extension(True)
         await self._db.load_extension(sqlite_vec.loadable_path())
