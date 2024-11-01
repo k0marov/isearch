@@ -32,6 +32,7 @@ async def _main():
     logger.info(f'got config: {cfg}')
 
     db = database.SQLiteDB(logger=logger.getChild('database'), db_path=cfg.db_path)
+    await db.init_db()
     embedder = _init_embedder(cfg, logger.getChild('embedder'))
 
     searcher = search.SearchServiceImpl(logger=logger.getChild('searcher'), db=db, emb=embedder)
