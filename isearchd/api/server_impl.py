@@ -32,15 +32,12 @@ class SocketServerImpl(SocketServer):
 
         self._logger.debug(f'got message "{input}"')
         if input.startswith('search:'):  # search:5:prompt
-            print('\n'*8)
-            print('\n'*8)
             count, text = input.removeprefix('search:').split(':', maxsplit=1)
             query = dto.SearchQuery(text=text, count=int(count))
             output = '\n'.join((await self._searcher.search(query)).filepaths)
             self._logger.debug(f'answering with "{output}"')
             writer.write(output.encode())
         elif input.startswith('reindex:'):
-            # await asyncio.sleep(100)
             dir = input.removeprefix('reindex:')
             self._logger.info(
                 'performing reindex because of socket request', extra={'dir': dir})
