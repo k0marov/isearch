@@ -1,12 +1,14 @@
 """Main entrypoint module for isearchd."""
 import asyncio
 import logging
+import sys
 
 from api import server_impl
 from datasources import database, inotify_watcher
 from domain import config
 from domain.service import search, inserter
 from domain.interfaces.embedder import Embedder
+from domain import const
 
 
 def _init_embedder(cfg: config.Config, logger: logging.Logger) -> Embedder:
@@ -21,6 +23,9 @@ def _init_embedder(cfg: config.Config, logger: logging.Logger) -> Embedder:
 
 
 async def _main():
+    if sys.argv and sys.argv[1] in ('-h', '--help'):
+        print(const.HELP_MSG)
+        return
     cfg = config.get_config_from_env()
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger('isearch')
