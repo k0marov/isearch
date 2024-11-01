@@ -26,6 +26,7 @@ async def _main():
     if len(sys.argv) > 1 and sys.argv[1] in ('-h', '--help'):
         print(const.HELP_MSG)
         return
+
     cfg = config.get_config_from_env()
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger('isearch')
