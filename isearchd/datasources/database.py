@@ -18,7 +18,7 @@ class SQLiteDB(database.Database):
     async def init_db(self) -> None:
         """Initialize database, load extensions, apply migrations."""
         self._logger.info(f'initializing db at {self._db_path}...')
-        os.makedirs(os.path.dirname(self._db_path))
+        os.makedirs(os.path.dirname(self._db_path), exist_ok=True)
         self._db = await aiosqlite.connect(self._db_path)
         await self._db.enable_load_extension(True)
         await self._db.load_extension(sqlite_vec.loadable_path())
