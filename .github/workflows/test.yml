@@ -1,0 +1,21 @@
+name: Tests
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+  workflow_dispatch:
+
+jobs:
+  integration_tests:
+    name: Интеграционные тесты
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Установка Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12.6
+    - name: Запуск скрипта
+      run: chmod +x tests/integration.sh && ./tests/integration.sh 
