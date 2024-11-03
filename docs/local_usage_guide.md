@@ -1,5 +1,6 @@
 # Локальный запуск
 
+
 ### 1. Клонирование и инициализация
 
 NOTE: Вся модель + зависимости занимает 5 ГБ, поэтому если не хочется скачивать её,
@@ -8,9 +9,12 @@ NOTE: Вся модель + зависимости занимает 5 ГБ, по
 Тогда достаточно будет на следующем шаге выполнить `pip install -r test.requirements.txt` (вместо всего `requirements.txt`) для `isearchd`. 
 В таком случае в качестве эмбеддингов будут генерироваться рандомные векторы, но вся остальная (питоновская) часть проекта будет работать корректно.
 
+В данном случае демонстрируется вариант локального запуска, когда не скачивается модель на 5GB.
+
 ```bash
 git clone 'github.com/k0marov/isearch' isearch 
 cd isearch 
+export ISEARCH_TEST=1
 git checkout v0.1.0 
 
 cd isearchcli 
@@ -26,7 +30,7 @@ pip install -r requirements.txt
 cd ../isearchd 
 python3 -m venv venv 
 source venv/bin/activate 
-pip install -r requirements.txt  # or test.requirements.txt to skip ML model dependencies
+pip install -r test.requirements.txt  
 ```
 
 ### 2. Запуск isearchd
