@@ -12,7 +12,7 @@ NOTE: Вся модель + зависимости занимает 5 ГБ, по
 В данном случае демонстрируется вариант локального запуска, когда не скачивается модель на 5GB.
 
 ```bash
-git clone 'github.com/k0marov/isearch' isearch 
+git clone 'https://github.com/k0marov/isearch' isearch 
 cd isearch 
 export ISEARCH_TEST=1
 git checkout v0.1.0 
